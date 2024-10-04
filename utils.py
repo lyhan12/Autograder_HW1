@@ -264,3 +264,91 @@ def extract_initial_variables(notebook_path):
                     namespaces[key] = cell_namespace[key]
     
     return namespaces
+
+def extract_cell_content_and_outputs(notebook_path, start_index, end_index, line_width=80):
+    """
+    Extracts the content of text (markdown) and output (from code) cells in a specified index range of a Jupyter notebook,
+    wrapping text lines to a specified width for better readability.
+    
+    :param notebook_path: Path to the Jupyter notebook file.
+    :param start_index: Starting index of the cell range to extract from (inclusive).
+    :param end_index: Ending index of the cell range to extract to (exclusive).
+    :param line_width: Maximum width of the text lines, default is 80 characters.
+    :return: List of dictionaries, each containing the index, cell_type, and extracted content or outputs.
+    """
+    with open(notebook_path, 'r', encoding='utf-8') as f:
+        nb = nbformat.read(f, as_version=4)
+    
+    extracted_cells = []
+    
+    for cell_index in range(start_index, min(end_index, len(nb.cells))):
+        cell = nb.cells[cell_index]
+        cell_data = {
+            "index": cell_index,
+            "cell_type": cell.cell_type,
+            "content": None,
+            "outputs": None
+        }
+        
+        if cell.cell_type == 'markdown':
+            # Wrap and extract markdown cell content
+            wrapped_text = "\n".join(wrap(cell.source, width=line_width))
+            cell_data["content"] = wrapped_text  # Store the wrapped markdown content
+        
+        elif cell.cell_type == 'code':
+            # Extract code cell content and outputs
+            cell_data["content"] = cell.source  # Store the code source
+            code_outputs = []
+            for output in cell.outputs:
+                if output.output_type == 'stream':
+                    wrapped_output = "\n".join(wrap(output.text, width=line_width))
+                    code_outputs.append(wrapped_output)
+                elif output.output_type in ['execute_result', 'display_data']:
+                    if 'text/plain' in output.data:
+                        wrapped_output = "\n".join(wrap(output.data['text/plain'], width=line_width))
+                        code_outputs.append(wrapped_output)
+                    if 'image/png' in output.data:
+                        code_outputs.append("<Image output not shown>")
+                elif output.output_type == 'error':
+                    wrapped_output = "\n".join(wrap(f"Error: {output.ename}, {output.evalue}", width=line_width))
+                    code_outputs.append(wrapped_output)
+            cell_data["outputs"] = code_outputs  # Store the outputs of the code cell
+            
+        extracted_cells.append(cell_data)
+    
+    return extracted_cells
+
+
+def search_in_extracted_content(extracted_cells, search_string, case_sensitive=False):
+    """
+    Searches for a string within the content and outputs of extracted cells.
+    
+    :param extracted_cells: List of dictionaries with cell content and outputs (from extract_cell_content_and_outputs).
+    :param search_string: The string to search for.
+    :param case_sensitive: Boolean flag indicating if the search should be case-sensitive. Default is False.
+    :return: Tuple containing:
+        - A boolean flag indicating if the search string was found.
+        - List of dictionaries with cell details where the search string was found.
+    """
+    found_cells = []
+    found_flag = False  # Initialize flag as False
+    
+    # Normalize search string if case sensitivity is off
+    if not case_sensitive:
+        search_string = search_string.lower()
+    
+    for cell in extracted_cells:
+        content = cell.get('content', "")
+        outputs = cell.get('outputs', []) or []
+
+        # Normalize content and outputs if case sensitivity is off
+        if not case_sensitive:
+            content = content.lower()
+            outputs = [output.lower() for output in outputs]
+        
+        # Check if the search string is in the content or any output
+        if search_string in content or any(search_string in output for output in outputs):
+            found_flag = True  # Set the flag to True if the search string is found
+            found_cells.append(cell)
+    
+    return found_flag, found_cells

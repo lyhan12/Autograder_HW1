@@ -10,8 +10,8 @@ from gradescope_utils.autograder_utils.json_test_runner import JSONTestRunner
 import matplotlib  # Import matplotlib to set the backend
 matplotlib.use('Agg')
 
-from tests import test_section_one
-from tests import test_files
+from tests import grade_assignments 
+from tests import check_files
 
 import glob
 import utils
@@ -32,16 +32,13 @@ if __name__ == '__main__':
 
 
     if notebook_path is None:
-
-
-        submission_test = unittest.defaultTestLoader.loadTestsFromTestCase(test_files.TestSubmission)
+        submission_test = unittest.defaultTestLoader.loadTestsFromTestCase(check_files.TestSubmission)
         suite = unittest.TestSuite([submission_test])
         runner = unittest.TextTestRunner(verbosity=2)
         res = runner.run(suite)
 
         if not res.wasSuccessful():
             exit(0)
-
 
         notebook_files = glob.glob('/autograder/submission/*.ipynb')
         print(notebook_files)
@@ -58,38 +55,30 @@ if __name__ == '__main__':
         # Proceed with grading using notebook_path
         assert len(notebook_files) == 1
 
-
-
-
-
-
     suite = unittest.TestSuite()
-    tests = unittest.defaultTestLoader.loadTestsFromTestCase(test_section_one.TestSectionOneTwo)
+    tests = unittest.defaultTestLoader.loadTestsFromTestCase(grade_assignments.GradeAssignment)
     for test in tests:
         setattr(test, 'notebook_path', notebook_path)
     suite.addTests(tests)
 
-        
-    with open(result_path, 'w') as f:
-       runner = JSONTestRunner(visibility='visible', stream=f)
-       runner.run(suite)
-
 
     # if debug_mode is True, read the json file and print test case with score
     if debug_mode:
-
         runner = unittest.TextTestRunner(verbosity=2)
         for test in tests:
             runner.run(test)
 
+
+    with open(result_path, 'w') as f:
+        runner = JSONTestRunner(visibility='visible', stream=f)
+        runner.run(suite)
+
+    if debug_mode:
         print('')
         print("============ JSON Result ============")
         with open(result_path, 'r') as f:
             data = json.load(f)
             for test in data['tests']:
                 print(f"{test['number']}: {test['score']}/{test['max_score']} ({test['name']})")
-
-    
-
 
 
