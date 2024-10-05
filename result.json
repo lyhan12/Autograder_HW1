@@ -1,0 +1,72 @@
+{
+    "tests": [
+        {
+            "name": "test_Liner_Shenaniganz_1_2_1 (tests.grade_assignments.GradeAssignment.test_Liner_Shenaniganz_1_2_1)",
+            "score": 2.0,
+            "max_score": 2.0,
+            "status": "passed",
+            "output": "\nExists new_df:  True\nContains NaN:  False\nUsed dropna function:  True\n",
+            "number": "2.5"
+        },
+        {
+            "name": "test_Liner_Shenaniganz_1_2_2 (tests.grade_assignments.GradeAssignment.test_Liner_Shenaniganz_1_2_2)",
+            "score": 2.0,
+            "max_score": 2.0,
+            "status": "passed",
+            "output": "\nExists new_df:  True\nIndex changed:  True\nIndexing is 1-based:  True\n",
+            "number": "2.6"
+        },
+        {
+            "name": "test_Liner_Shenaniganz_1_2_3 (tests.grade_assignments.GradeAssignment.test_Liner_Shenaniganz_1_2_3)",
+            "score": 3.0,
+            "max_score": 3.0,
+            "status": "passed",
+            "output": "\nExists new_df:  True\nHas totalDeaths:  True\nCorrect totalDeaths:  True\n",
+            "number": "2.7"
+        },
+        {
+            "name": "test_Tailoring_Time_1_3 (tests.grade_assignments.GradeAssignment.test_Tailoring_Time_1_3)",
+            "score": 10.0,
+            "max_score": 10.0,
+            "status": "passed",
+            "output": "\nExists new_df:  True\nDate column exists:  True\nDate column has correct format:  True\nDate column next to id:  True\nYear column exists:  False\nMonth column exists:  False\nDay column exists:  False\n",
+            "number": "2.8"
+        },
+        {
+            "name": "test_cute_webscraping (tests.grade_assignments.GradeAssignment.test_cute_webscraping)",
+            "score": 0.0,
+            "max_score": 0.0,
+            "status": "passed",
+            "output": "\nExists df in the code:  True\nExists \"volcanoes.csv\":  True\nEqual df and csv:  True\nEqual df and gt:  True\n",
+            "number": "2.1"
+        },
+        {
+            "name": "test_linear_thingz_1_1_1 (tests.grade_assignments.GradeAssignment.test_linear_thingz_1_1_1)",
+            "score": 1.0,
+            "max_score": 1.0,
+            "status": "passed",
+            "output": "\nFound shape function:  True\nFound shape values:  True\n",
+            "number": "2.2"
+        },
+        {
+            "name": "test_linear_thingz_1_1_2 (tests.grade_assignments.GradeAssignment.test_linear_thingz_1_1_2)",
+            "score": 1.0,
+            "max_score": 1.0,
+            "status": "passed",
+            "output": "\nFound columns function:  True\nFound features names:  True\n",
+            "number": "2.3"
+        },
+        {
+            "name": "test_linear_thingz_1_1_3 (tests.grade_assignments.GradeAssignment.test_linear_thingz_1_1_3)",
+            "score": 1.0,
+            "max_score": 1.0,
+            "status": "passed",
+            "output": "\nExists new_df:  True\nExcluded columns correctly:  True\nUsed drop function:  True\n",
+            "number": "2.4"
+        }
+    ],
+    "leaderboard": [],
+    "visibility": "visible",
+    "execution_time": "15.72",
+    "score": 20.0
+}
