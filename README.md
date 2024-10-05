@@ -92,11 +92,31 @@ The begining end of relevant cells are identified by question titles (e.g. `TASK
 ```
 
 ### Implementing the Autograder for New Custom Assignment
-- Implement your rubrics in `tests/grade_assignments.py`. Refer to the example above. You can use it as a template and you can also find useful functions from `utils.py`
-- You should specify
+```
+.
+├── assets
+│   ├── ...
+│   └── GradescopeRunAutograder.png
+├── example
+│   └── example_submission.ipynb
+├── README.md
+├── requirements.txt
+├── run_autograder
+├── run_tests.py
+├── setup.sh
+├── tests
+│   ├── check_files.py
+│   ├── grade_assignments.py
+│   └── __init__.py
+└── utils.py
+```
+
+- The only important files you might want to look at is `tests/grade_assignments.py` and `utils.py`. The main code is `run_test.py`. You can refer to the arguments of it when your are debugging the autograder with ipdb.
+- Implement your rubrics in `tests/grade_assignments.py`. Specifically,
   - (1) Identify the beginning and end of the cells corresponding to each question (Simply use the quetion titles like the above example)
   - (2) Implement required inspections
   - (3) Set scores for each case
+ - When implementing, you can just refer to the above example or other examples contained in the `grade_assignments.py`. You can use them as templates, and also refer to the useful functions from `utils.py`
 
 ### How to Run Autograder in the Gradescope
 - You can refer to the offical Gradescope documents for the detailed explanation about how to upload the Autograder.
