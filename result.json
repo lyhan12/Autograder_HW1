@@ -26,10 +26,10 @@
         },
         {
             "name": "test_Tailoring_Time_1_3 (tests.grade_assignments.GradeAssignment.test_Tailoring_Time_1_3)",
-            "score": 10.0,
+            "score": 8.0,
             "max_score": 10.0,
-            "status": "passed",
-            "output": "\nExists new_df:  True\nDate column exists:  True\nDate column has correct format:  True\nDate column next to id:  True\nYear column exists:  False\nMonth column exists:  False\nDay column exists:  False\n",
+            "status": "failed",
+            "output": "\nExists new_df:  True\nDate column exists:  True\nDate column has correct format:  True\nDate column next to id:  True\nYear column exists:  True\nMonth column exists:  True\nDay column exists:  True\n",
             "number": "2.8"
         },
         {
@@ -67,6 +67,6 @@
     ],
     "leaderboard": [],
     "visibility": "visible",
-    "execution_time": "15.72",
-    "score": 20.0
+    "execution_time": "36.14",
+    "score": 18.0
 }

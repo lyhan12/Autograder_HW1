@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import requests
 
-from utils import (
+from cell_utils import (
         extract_variables, 
         extract_initial_variables, 
         find_cells_with_text, 
@@ -15,7 +15,7 @@ from utils import (
         has_string_in_cell,
         has_string_in_code_cells,
         extract_cell_content_and_outputs,
-        search_in_extracted_content,
+        search_text_in_extracted_content,
         print_text_and_output_cells,
         print_code_and_output_cells)
 
@@ -27,7 +27,7 @@ class GradeAssignment(unittest.TestCase):
         self.notebook_path = None
 
 
-    @weight(0.0)
+    @weight(5.0)
     @number("2.1")
     def test_cute_webscraping(self):
         print('')
@@ -81,11 +81,11 @@ class GradeAssignment(unittest.TestCase):
         print('')
 
 
-        begin_cells = find_cells_with_text(self.notebook_path, "**1.1.1:** *In one line of code and **using only one function**")
+        begin_cells = find_cells_with_text(self.notebook_path, "**1.1.1:** In one line of code and **using only one single attribute call**")
         begin_cell = begin_cells[0]
         begin_cell_idx = begin_cell['index']
 
-        end_cells = find_cells_with_text(self.notebook_path, "**1.1.2:** *In one line of code, list the **names** of all the **features** in the dataframe.*")
+        end_cells = find_cells_with_text(self.notebook_path, "**1.1.2:** In one line of code and **using only one single attribute call**,")
         end_cell = end_cells[0]
         end_cell_idx = end_cell['index']
 
@@ -93,9 +93,9 @@ class GradeAssignment(unittest.TestCase):
         cell_texts = extract_cell_content_and_outputs(self.notebook_path, begin_cell_idx, end_cell_idx)
 
         # search for shape, 200, 43
-        search_shape, _ = search_in_extracted_content(cell_texts, "shape")
-        search_200, _ = search_in_extracted_content(cell_texts, "200")
-        search_43, _ = search_in_extracted_content(cell_texts, "43")
+        search_shape, _ = search_text_in_extracted_content(cell_texts, "shape")
+        search_200, _ = search_text_in_extracted_content(cell_texts, "200")
+        search_43, _ = search_text_in_extracted_content(cell_texts, "43")
 
         found_shape_fn = search_shape
         found_shape_val = search_200 and search_43
@@ -116,21 +116,21 @@ class GradeAssignment(unittest.TestCase):
         print('')
 
 
-        begin_cells = find_cells_with_text(self.notebook_path, "**1.1.2:** *In one line of code, list the **names** of all the **features** in the dataframe.*")
+        begin_cells = find_cells_with_text(self.notebook_path, "**1.1.2:** In one line of code and **using only one single attribute call**")
         begin_cell = begin_cells[0]
         begin_cell_idx = begin_cell['index']
 
-        end_cells = find_cells_with_text(self.notebook_path, "**1.1.3:** *In one line of code, create a **new dataframe** called **new_df** that **contains all** the features of the **old** dataframe **except the following**:*")
+        end_cells = find_cells_with_text(self.notebook_path, "**1.1.3:** *In one line of code, create a **new dataframe** called **new_df**")
         end_cell = end_cells[0]
         end_cell_idx = end_cell['index']
 
         cell_texts = extract_cell_content_and_outputs(self.notebook_path, begin_cell_idx, end_cell_idx)
 
-        search_columns, _ = search_in_extracted_content(cell_texts, "columns")
+        search_columns, _ = search_text_in_extracted_content(cell_texts, "columns")
 
-        search_feature_year, _ = search_in_extracted_content(cell_texts, "year")
-        search_feature_housesDestroyedAmountOrderTotal, _ = search_in_extracted_content(cell_texts, "housesDestroyedAmountOrderTotal")
-        search_feature_damageMillionsDollarsTotal, _ = search_in_extracted_content(cell_texts, "damageMillionsDollarsTotal")
+        search_feature_year, _ = search_text_in_extracted_content(cell_texts, "year")
+        search_feature_housesDestroyedAmountOrderTotal, _ = search_text_in_extracted_content(cell_texts, "housesDestroyedAmountOrderTotal")
+        search_feature_damageMillionsDollarsTotal, _ = search_text_in_extracted_content(cell_texts, "damageMillionsDollarsTotal")
         search_feature = search_feature_year and search_feature_housesDestroyedAmountOrderTotal and search_feature_damageMillionsDollarsTotal
 
 
@@ -154,7 +154,7 @@ class GradeAssignment(unittest.TestCase):
     def test_linear_thingz_1_1_3(self, set_score=None):
         print('')
 
-        begin_cells = find_cells_with_text(self.notebook_path, "**1.1.3:** *In one line of code, create a **new dataframe** called **new_df** that **contains all** the features of the **old** dataframe **except the following**:*")
+        begin_cells = find_cells_with_text(self.notebook_path, "**1.1.3:** *In one line of code, create a **new dataframe** called **new_df**")
         begin_cell = begin_cells[0]
         begin_cell_idx = begin_cell['index']
 
@@ -164,7 +164,7 @@ class GradeAssignment(unittest.TestCase):
 
         cell_vars = extract_variables(self.notebook_path, cell_idx=end_cell_idx - 1)
         cell_texts = extract_cell_content_and_outputs(self.notebook_path, begin_cell_idx, end_cell_idx)
-        search_drop, _ = search_in_extracted_content(cell_texts, "drop")
+        search_drop, _ = search_text_in_extracted_content(cell_texts, "drop")
 
         new_df = cell_vars.get("new_df", None)
 
@@ -212,14 +212,14 @@ class GradeAssignment(unittest.TestCase):
         begin_cell = begin_cells[0]
         begin_cell_idx = begin_cell['index']
 
-        end_cells = find_cells_with_text(self.notebook_path, "**1.2.2:** *In one line of code, **reset** the **index column** of the dataframe so that it has **1-based indexing**.*")
+        end_cells = find_cells_with_text(self.notebook_path, "**1.2.2:** *In one line of code, **change** the **index column** of the dataframe so that it has **1-based indexing**.*")
         end_cell = end_cells[0]
         end_cell_idx = end_cell['index']
 
         cell_vars = extract_variables(self.notebook_path, cell_idx=end_cell_idx - 1)
         cell_texts = extract_cell_content_and_outputs(self.notebook_path, begin_cell_idx, end_cell_idx)
 
-        search_dropna, _ = search_in_extracted_content(cell_texts, "dropna")
+        search_dropna, _ = search_text_in_extracted_content(cell_texts, "dropna")
         new_df = cell_vars.get("new_df", None)
 
         exists_new_df = (new_df is not None) and (type(new_df) == pd.DataFrame)
@@ -246,11 +246,11 @@ class GradeAssignment(unittest.TestCase):
     def test_Liner_Shenaniganz_1_2_2(self, set_score=None):
         print('')
 
-        begin_cells = find_cells_with_text(self.notebook_path, "**1.2.2:** *In one line of code, **reset** the **index column** of the dataframe so that it has **1-based indexing**.*")
+        begin_cells = find_cells_with_text(self.notebook_path, "**1.2.2:** *In one line of code")
         begin_cell = begin_cells[0]
         begin_cell_idx = begin_cell['index']
 
-        end_cells = find_cells_with_text(self.notebook_path, "**1.2.3:** *In one line of code, make a **new column** called **'totalDeaths'** that takes the **max** of the values given between")
+        end_cells = find_cells_with_text(self.notebook_path, "**1.2.3:** *In one line of code")
         end_cell = end_cells[0]
         end_cell_idx = end_cell['index']
 
