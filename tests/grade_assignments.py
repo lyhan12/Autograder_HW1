@@ -8,6 +8,7 @@ import numpy as np
 import requests
 
 from cell_utils import (
+        register_local_file,
         extract_variables, 
         extract_initial_variables, 
         find_cells_with_text, 
@@ -25,6 +26,13 @@ class GradeAssignment(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(GradeAssignment, self).__init__(*args, **kwargs)
         self.notebook_path = None
+
+
+        self.local_files = [
+            "volcanoes.csv"
+        ]
+        for file in self.local_files:
+            register_local_file(file)
 
 
     @weight(5.0)

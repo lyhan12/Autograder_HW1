@@ -40,7 +40,7 @@ if __name__ == '__main__':
         if not res.wasSuccessful():
             exit(0)
 
-        notebook_files = glob.glob('/autograder/submission/*.ipynb')
+        notebook_files = glob.glob('/autograder/submission/**/*.ipynb', recursive=True)
         print(notebook_files)
 
         if len(notebook_files) == 0:
